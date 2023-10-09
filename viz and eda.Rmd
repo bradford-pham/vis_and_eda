@@ -1,0 +1,6 @@
+---
+title: "VIZ part 1"
+output: github_document
+date: "2023-10-09"
+---
+
