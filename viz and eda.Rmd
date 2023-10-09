@@ -78,3 +78,21 @@ ggp_nyc_weather =
 
 
 ##Fancy plot 
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax,)) +
+  geom_point(aes(color = name), alpha = .3) +
+  geom_smooth(se = FALSE)
+
+```
+
+plots with facets 
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .3) + 
+  geom_smooth() + 
+  facet_grid(. ~ name)
+```
+
+
