@@ -7,6 +7,7 @@ date: "2023-10-09"
 
 ```{r}
 library(tidyverse)
+library(patchwork)
 
 
 knitr::opts_chunk$set(
@@ -91,6 +92,84 @@ weather_df |>
       viridis::scale_color_viridis(discrete = TRUE)
     
 ```
+
+
+```{r}
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    title = "Temparture Plot",
+    x = "Min daily temp (Degrees c)",
+    y = "M ax daily temp",
+    color = "Location",
+    caption = "max vs min daily temp in three locations; data from nrad" ) +
+      viridis::scale_color_viridis(discrete = TRUE) +
+  theme_bw()
+  theme(legend.position = "bottom") 
+```
+
+##data argumen
+
+```{r}
+weather_df |>
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth()
+
+
+nyc_weather_df = 
+  weather_df |> 
+  filter(name == "CentralPark_NY")
+
+hawaii_weather_df =
+  weather_df |>
+  filter(name == "Molokai_HI")
+
+ggplot(nyc_weather_df, aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_line(data = hawaii_weather_df)
+
+```
+
+
+
+## 'patchwork'
+
+```{r}
+weather_df |>
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point() +
+  facet_grid(. ~ name)
+```
+
+
+```{r}
+ggp_temp_scatter = 
+  weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)
+
+ggp_prcp_density = 
+ weather_df |>
+  ggplot(aes(x = prcp, color = name)) +
+  geom_density()
+```
+
+
+```{r}
+ggp_prcp_density =
+  weather_df |>
+  filter(prcp > 25) |>
+  ggplot(aes(x = prcp, color = names)) +
+  geom_density()
+```
+
+```{r}
+ggp_temp_scatter + ggp_prcp_density
+```
+
+
 
 
 

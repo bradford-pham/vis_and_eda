@@ -146,3 +146,89 @@ weather_df |>
     ## Warning: Removed 17 rows containing missing values (`geom_point()`).
 
 <img src="viz-and-eda-part-2_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" />
+
+``` r
+weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  labs(
+    title = "Temparture Plot",
+    x = "Min daily temp (Degrees c)",
+    y = "M ax daily temp",
+    color = "Location",
+    caption = "max vs min daily temp in three locations; data from nrad" ) +
+      viridis::scale_color_viridis(discrete = TRUE) +
+  theme_bw()
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+<img src="viz-and-eda-part-2_files/figure-gfm/unnamed-chunk-6-1.png" width="90%" />
+
+``` r
+  theme(legend.position = "bottom") 
+```
+
+    ## List of 1
+    ##  $ legend.position: chr "bottom"
+    ##  - attr(*, "class")= chr [1:2] "theme" "gg"
+    ##  - attr(*, "complete")= logi FALSE
+    ##  - attr(*, "validate")= logi TRUE
+
+\##data argumen
+
+``` r
+weather_df |>
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth()
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
+
+    ## Warning: Removed 17 rows containing non-finite values (`stat_smooth()`).
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+<img src="viz-and-eda-part-2_files/figure-gfm/unnamed-chunk-7-1.png" width="90%" />
+
+``` r
+nyc_weather_df = 
+  weather_df |> 
+  filter(name == "CentralPark_NY")
+
+hawaii_weather_df =
+  weather_df |>
+  filter(name == "Molokai_HI")
+
+ggplot(nyc_weather_df, aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_line(data = hawaii_weather_df)
+```
+
+<img src="viz-and-eda-part-2_files/figure-gfm/unnamed-chunk-7-2.png" width="90%" />
+
+## ‘patchwork’
+
+``` r
+weather_df |>
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point() +
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+<img src="viz-and-eda-part-2_files/figure-gfm/unnamed-chunk-8-1.png" width="90%" />
+
+``` r
+ggp_temp_scatter = 
+  weather_df |>
+  ggplot(aes(x = tmin, y = tmax, color = names)) + 
+  geom_point(alpha = .5)
+
+ggp_prcp_density = 
+ weather_df |>
+  ggplot(aes(x = prcp, color = names)) +
+  geom_density()
+```
