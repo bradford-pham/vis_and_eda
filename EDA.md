@@ -225,3 +225,76 @@ pivot_wider(
     ##  9 2021-09-01             30         30           30
     ## 10 2021-10-01             31         31           31
     ## # ℹ 14 more rows
+
+## General sumaries
+
+``` r
+weather_df |>
+  group_by(name, month) |>
+  summarize(
+    mean_tmax = mean(tmax, na.rm = TRUE),
+    median_tmax = median(tmax, na.rm = TRUE),
+    sd_tmax = sd(tmax, na.rm = TRUE)
+  )
+```
+
+    ## `summarise()` has grouped output by 'name'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 72 × 5
+    ## # Groups:   name [3]
+    ##    name           month      mean_tmax median_tmax sd_tmax
+    ##    <chr>          <date>         <dbl>       <dbl>   <dbl>
+    ##  1 CentralPark_NY 2021-01-01      4.27         5      3.34
+    ##  2 CentralPark_NY 2021-02-01      3.87         2.8    3.99
+    ##  3 CentralPark_NY 2021-03-01     12.3         12.2    6.91
+    ##  4 CentralPark_NY 2021-04-01     17.6         18.0    5.26
+    ##  5 CentralPark_NY 2021-05-01     22.1         22.2    5.63
+    ##  6 CentralPark_NY 2021-06-01     28.1         27.8    4.32
+    ##  7 CentralPark_NY 2021-07-01     28.4         28.3    3.17
+    ##  8 CentralPark_NY 2021-08-01     28.8         28.3    2.95
+    ##  9 CentralPark_NY 2021-09-01     24.8         24.4    2.52
+    ## 10 CentralPark_NY 2021-10-01     19.9         20.6    3.66
+    ## # ℹ 62 more rows
+
+``` r
+weather_df |>
+  group_by(name, month) |> 
+  summarize(mean_tmax = mean(tmax, na.rm = TRUE)) |>
+  ggplot(aes(x = month, y = mean_tmax, color = name)) +
+  geom_point() +
+  geom_line()
+```
+
+    ## `summarise()` has grouped output by 'name'. You can override using the
+    ## `.groups` argument.
+
+<img src="EDA_files/figure-gfm/unnamed-chunk-14-1.png" width="90%" />
+
+``` r
+weather_df |>
+  group_by(name, month) |>
+  summarize(mean_tmax = mean(tmax, na.rm = TRUE)) |>
+             pivot_wider(
+               names_from = name,
+               values_from = mean_tmax
+             )
+```
+
+    ## `summarise()` has grouped output by 'name'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 24 × 4
+    ##    month      CentralPark_NY Molokai_HI Waterhole_WA
+    ##    <date>              <dbl>      <dbl>        <dbl>
+    ##  1 2021-01-01           4.27       27.6        0.8  
+    ##  2 2021-02-01           3.87       26.4       -0.786
+    ##  3 2021-03-01          12.3        25.9        2.62 
+    ##  4 2021-04-01          17.6        26.6        6.10 
+    ##  5 2021-05-01          22.1        28.6        8.20 
+    ##  6 2021-06-01          28.1        29.6       15.3  
+    ##  7 2021-07-01          28.4        30.0       17.3  
+    ##  8 2021-08-01          28.8        29.5       17.2  
+    ##  9 2021-09-01          24.8        29.7       12.6  
+    ## 10 2021-10-01          19.9        29.1        5.48 
+    ## # ℹ 14 more rows
